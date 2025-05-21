@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panel Administrador - Escuela de Fútbol</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 1rem; background: #f0f0f0; }
+    h1 { color: #1a73e8; }
+    table { border-collapse: collapse; width: 100%; background: white; }
+    th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: center; }
+    button { padding: 0.3rem 0.6rem; margin: 0 0.2rem; cursor: pointer; }
+    input[type=number] { width: 80px; }
+  </style>
+</head>
+<body>
+
+<h1>Panel Administrador</h1>
+
+<button id="btn-agregar-jugador">Agregar nuevo jugador</button>
+
+<div id="form-agregar" style="display:none; margin: 1rem 0; background: white; padding: 1rem; max-width: 400px;">
+  <h3>Nuevo Jugador</h3>
+  <input type="text" id="nuevo-nombre" placeholder="Nombre completo" required />
+  <input type="number" id="nuevo-anio" placeholder="Año nacimiento" min="2000" max="2025" required />
+  <select id="nuevo-genero">
+    <option value="masculino">Masculino</option>
+    <option value="femenino">Femenino</option>
+  </select>
+  <button id="guardar-nuevo">Guardar</button>
+  <button id="cancelar-nuevo">Cancelar</button>
+  <p id="mensaje-nuevo" style="color:red;"></p>
+</div>
+
+<table id="tabla-jugadores">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Categoría</th>
+      <th>Puntos</th>
+      <th>Valor COP</th>
+      <th>Asignar/Quitar Puntos</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<script>
+  const btnAgregar = document.getElementById('btn-agregar-jugador');
+  const formAgregar = document.getElementById('form-agregar');
+  const guardarNuevo = document.getElementById('guardar-nuevo');
+  const cancelarNuevo = document.getElementById('cancelar-nuevo');
+  const mensajeNuevo = document.getElementById('mensaje-nuevo');
+
+  const tablaCuerpo = document.querySelector('#tabla-jugadores tbody');
+
+  function calcularCategoria(anio, genero) {
+    if (genero === 'femenino') return 'femenina';
+    if (anio >= 2017) return 'prepollito';
+    if (anio >= 2015) return 'pollido';
+    if (anio >= 2013) return 'preinfantil';
+    if (anio >= 2011) return 'infantil';
+    if (anio >= 2009) return 'prejuvenil';
+    return 'juvenil';
+  }
+
+  function cargarJugadores() {
+    let jugadores = JSON.parse(localStorage.getItem('jugadores')) || [];
+    jugadores.sort((a,b) => a.categoria.localeCompare(b.categoria) || a.nombre.localeCompare(b.nombre));
+    tablaCuerpo.innerHTML = '';
+    jugadores.forEach((j, i) => {
+      const fila = document.createElement('tr');
+
+      fila.innerHTML = `
+        <td>${j.nombre}</td>
+        <td>${j.categoria}</td>
+        <td>${j.puntos}</td>
+        <td>$${j.puntos * 200}</td>
+        <td>
+          <input type="number" min="-100" max="100" step="1" value="0" id="input-puntos-${i}" style="width: 60px;">
+          <input type="text" placeholder="Comentario" id="input-comentario-${i}" style="width: 120px;">
+          <button onclick="actualizarPuntos(${i})">OK</button>
+        </td>
+        <td>
+          <button onclick="eliminarJugador(${i})" style="color:red;">Eliminar</button>
+        </td>
+      `;
+
+      tablaCuerpo.appendChild(fila);
+    });
+  }
+
+  function actualizarPuntos(index) {
+    const inputPuntos = document.getElementById(`input-puntos-${index}`);
+    const inputComentario = document.getElementById(`input-comentario-${index}`);
+    let valor = parseInt(inputPuntos.value);
+    let comentario = inputComentario.value.trim();
+
+    if (isNaN(valor) || valor === 0) {
+      alert('Introduce un número diferente de 0 para los puntos.');
+      return;
+    }
+
+    let jugadores = JSON.parse(localStorage.getItem('jugadores')) || [];
+    jugadores[index].puntos += valor;
+
+    if(!jugadores[index].historial) jugadores[index].historial = [];
+    jugadores[index].historial.push({
+      fecha: new Date().toLocaleDateString(),
+      puntos: valor,
+      comentario: comentario || (valor > 0 ? 'Puntos asignados' : 'Puntos descontados')
+    });
+
+    if(jugadores[index].puntos < 0) jugadores[index].puntos = 0;
+
+    localStorage.setItem('jugadores', JSON.stringify(jugadores));
+    cargarJugadores();
+  }
+
+  function eliminarJugador(index) {
+    if(confirm('¿Seguro que quieres eliminar este jugador?')) {
+      let jugadores = JSON.parse(localStorage.getItem('jugadores')) || [];
+      jugadores.splice(index,1);
+      localStorage.setItem('jugadores', JSON.stringify(jugadores));
+      cargarJugadores();
+    }
+  }
+
+  btnAgregar.addEventListener('click', () => {
+    formAgregar.style.display = 'block';
+    mensajeNuevo.textContent = '';
+  });
+
+  cancelarNuevo.addEventListener('click', () => {
+    formAgregar.style.display = 'none';
+    mensajeNuevo.textContent = '';
+  });
+
+  guardarNuevo.addEventListener('click', () => {
+    const nombre = document.getElementById('nuevo-nombre').value.trim();
+    const anio = parseInt(document.getElementById('nuevo-anio').value);
+    const genero = document.getElementById('nuevo-genero').value;
+
+    if (!nombre || !anio) {
+      mensajeNuevo.textContent = 'Completa todos los campos.';
+      return;
+    }
+
+    let jugadores = JSON.parse(localStorage.getItem('jugadores')) || [];
+
+    if(jugadores.find(j => j.nombre.toLowerCase() === nombre.toLowerCase())){
+      mensajeNuevo.textContent = 'Jugador ya registrado.';
+      return;
+    }
+
+    const categoria = calcularCategoria(anio, genero);
+    jugadores.push({ nombre, anio, genero, categoria, puntos: 0, historial: [] });
+    localStorage.setItem('jugadores', JSON.stringify(jugadores));
+    formAgregar.style.display = 'none';
+
+    cargarJugadores();
+  });
+
+  cargarJugadores();
+</script>
+
+</body>
+</html>

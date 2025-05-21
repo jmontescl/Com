@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Perfil de Jugador - Escuela de Fútbol</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 1rem; background: #f9f9f9; }
+    h1, h2 { color: #1a73e8; }
+    #perfil { background: white; padding: 1rem; border-radius: 6px; max-width: 400px; margin-top: 1rem; box-shadow: 0 0 10px rgba(0,0,0,0.1);}
+    .error { color: red; }
+  </style>
+</head>
+<body>
+
+  <h1>Consulta tu perfil</h1>
+  <p>Escribe tu nombre completo para ver tus puntos y valor en COP.</p>
+
+  <input type="text" id="input-nombre" placeholder="Nombre completo" style="padding:0.5rem; font-size:1rem; width: 300px;" />
+  <button id="btn-buscar" style="padding:0.5rem 1rem; font-size:1rem; margin-left: 0.5rem;">Buscar</button>
+
+  <div id="perfil" style="display:none;">
+    <h2>Perfil de <span id="nombre-jugador"></span></h2>
+    <p><strong>Categoría:</strong> <span id="categoria-jugador"></span></p>
+    <p><strong>Puntos:</strong> <span id="puntos-jugador"></span></p>
+    <p><strong>Valor en COP:</strong> $<span id="valor-jugador"></span></p>
+    <h3>Historial</h3>
+    <div id="historial-jugador"></div>
+  </div>
+
+  <p id="error-msg" class="error"></p>
+
+  <script>
+    const btnBuscar = document.getElementById("btn-buscar");
+    const inputNombre = document.getElementById("input-nombre");
+    const perfil = document.getElementById("perfil");
+    const nombreJugador = document.getElementById("nombre-jugador");
+    const categoriaJugador = document.getElementById("categoria-jugador");
+    const puntosJugador = document.getElementById("puntos-jugador");
+    const valorJugador = document.getElementById("valor-jugador");
+    const historialJugador = document.getElementById("historial-jugador");
+    const errorMsg = document.getElementById("error-msg");
+
+    btnBuscar.addEventListener("click", () => {
+      const nombreBusqueda = inputNombre.value.trim().toLowerCase();
+      if(!nombreBusqueda){
+        errorMsg.textContent = "Por favor escribe tu nombre completo.";
+        perfil.style.display = "none";
+        return;
+      }
+
+      const jugadores = JSON.parse(localStorage.getItem("jugadores")) || [];
+      const jugador = jugadores.find(j => j.nombre.toLowerCase() === nombreBusqueda);
+
+      if(!jugador){
+        errorMsg.textContent = "Jugador no encontrado. Verifica el nombre.";
+        perfil.style.display = "none";
+        return;
+      }
+
+      errorMsg.textContent = "";
+      nombreJugador.textContent = jugador.nombre;
+      categoriaJugador.textContent = jugador.categoria;
+      puntosJugador.textContent = jugador.puntos;
+      valorJugador.textContent = jugador.puntos * 200;
+
+      if(jugador.historial && jugador.historial.length > 0){
+        historialJugador.innerHTML = jugador.historial
+          .map(h => `<div>${h.fecha}: ${h.comentario} (${h.puntos > 0 ? '+' : ''}${h.puntos} pts)</div>`)
+          .join("");
+      } else {
+        historialJugador.textContent = "No hay historial de puntos.";
+      }
+
+      perfil.style.display = "block";
+    });
+
+    // Permitir buscar con Enter
+    inputNombre.addEventListener("keypress", e => {
+      if(e.key === "Enter") btnBuscar.click();
+    });
+  </script>
+
+</body>
+</html>

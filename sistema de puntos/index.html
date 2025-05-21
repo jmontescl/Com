@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Escuela de Fútbol - Inicio</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; padding:0; }
+    header { background:#1a73e8; color:#fff; padding:1rem; text-align:center; }
+    nav a { color:#fff; margin: 0 1rem; text-decoration:none; font-weight:bold; }
+    section { padding:1rem; max-width:600px; margin:auto; }
+    form input, form select, form button { margin:0.5rem 0; padding:0.5rem; width: 100%; font-size:1rem; }
+    #mensaje-inscripcion { color: green; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Escuela de Fútbol Ángeles del Deporte</h1>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="admin.html">Panel Admin</a>
+    <a href="jugador.html">Perfil Jugador</a>
+  </nav>
+</header>
+
+<section>
+  <h2>Misión</h2>
+  <p>Formar deportistas integrales, promoviendo valores y habilidades técnicas, físicas y humanas a través del fútbol.</p>
+</section>
+
+<section>
+  <h2>Visión</h2>
+  <p>Ser reconocidos como escuela líder en formación deportiva y humana a nivel regional.</p>
+</section>
+
+<section>
+  <h2>Inscripción de Nuevos Jugadores</h2>
+  <form id="form-inscripcion">
+    <input type="text" id="nombre-inscripcion" placeholder="Nombre completo" required />
+    <input type="number" id="anio-nacimiento" placeholder="Año de nacimiento" required min="2000" max="2025"/>
+    <select id="genero-inscripcion">
+      <option value="masculino">Masculino</option>
+      <option value="femenino">Femenino</option>
+    </select>
+    <button type="submit">Registrar Jugador</button>
+  </form>
+  <p id="mensaje-inscripcion"></p>
+</section>
+
+<script>
+  const form = document.getElementById('form-inscripcion');
+  const mensaje = document.getElementById('mensaje-inscripcion');
+
+  function calcularCategoria(anio, genero) {
+    if (genero === 'femenino') return 'femenina';
+    if (anio >= 2017) return 'prepollito';
+    if (anio >= 2015) return 'pollido';
+    if (anio >= 2013) return 'preinfantil';
+    if (anio >= 2011) return 'infantil';
+    if (anio >= 2009) return 'prejuvenil';
+    return 'juvenil';
+  }
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const nombre = document.getElementById('nombre-inscripcion').value.trim();
+    const anio = parseInt(document.getElementById('anio-nacimiento').value);
+    const genero = document.getElementById('genero-inscripcion').value;
+    if(!nombre || !anio) {
+      mensaje.textContent = 'Por favor completa todos los campos.';
+      mensaje.style.color = 'red';
+      return;
+    }
+
+    const categoria = calcularCategoria(anio, genero);
+    let jugadores = JSON.parse(localStorage.getItem('jugadores')) || [];
+
+    if (jugadores.find(j => j.nombre.toLowerCase() === nombre.toLowerCase())) {
+      mensaje.textContent = 'Este jugador ya está registrado.';
+      mensaje.style.color = 'red';
+      return;
+    }
+
+    jugadores.push({ nombre, anio, genero, categoria, puntos: 0, historial: [] });
+    localStorage.setItem('jugadores', JSON.stringify(jugadores));
+
+    mensaje.textContent = 'Jugador registrado exitosamente.';
+    mensaje.style.color = 'green';
+    form.reset();
+  });
+</script>
+
+</body>
+</html>
