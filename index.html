@@ -1,83 +1,38 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Perfil de Jugador - Escuela de Fútbol</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 1rem; background: #f9f9f9; }
-    h1, h2 { color: #1a73e8; }
-    #perfil { background: white; padding: 1rem; border-radius: 6px; max-width: 400px; margin-top: 1rem; box-shadow: 0 0 10px rgba(0,0,0,0.1);}
-    .error { color: red; }
-  </style>
-</head>
-<body>
-
-  <h1>Consulta tu perfil</h1>
-  <p>Escribe tu nombre completo para ver tus puntos y valor en COP.</p>
-
-  <input type="text" id="input-nombre" placeholder="Nombre completo" style="padding:0.5rem; font-size:1rem; width: 300px;" />
-  <button id="btn-buscar" style="padding:0.5rem 1rem; font-size:1rem; margin-left: 0.5rem;">Buscar</button>
-
-  <div id="perfil" style="display:none;">
-    <h2>Perfil de <span id="nombre-jugador"></span></h2>
-    <p><strong>Categoría:</strong> <span id="categoria-jugador"></span></p>
-    <p><strong>Puntos:</strong> <span id="puntos-jugador"></span></p>
-    <p><strong>Valor en COP:</strong> $<span id="valor-jugador"></span></p>
-    <h3>Historial</h3>
-    <div id="historial-jugador"></div>
-  </div>
-
-  <p id="error-msg" class="error"></p>
-
-  <script>
-    const btnBuscar = document.getElementById("btn-buscar");
-    const inputNombre = document.getElementById("input-nombre");
-    const perfil = document.getElementById("perfil");
-    const nombreJugador = document.getElementById("nombre-jugador");
-    const categoriaJugador = document.getElementById("categoria-jugador");
-    const puntosJugador = document.getElementById("puntos-jugador");
-    const valorJugador = document.getElementById("valor-jugador");
-    const historialJugador = document.getElementById("historial-jugador");
-    const errorMsg = document.getElementById("error-msg");
-
-    btnBuscar.addEventListener("click", () => {
-      const nombreBusqueda = inputNombre.value.trim().toLowerCase();
-      if(!nombreBusqueda){
-        errorMsg.textContent = "Por favor escribe tu nombre completo.";
-        perfil.style.display = "none";
+<!DOCTYPE html><html dir="ltr" lang="es-MX" class="theme light classic"><head><base href="/desarrollo-de-sitio-web-para-gesti-n-de-puntos-de-jugadores/"><meta charset="utf-8"><title>Sistema de puntos</title><meta name="app-name" content="export_website"/><meta name="viewport" content="width=device-width, initial-scale=1"><link href="_assets/a0684b0780c739e9.vendor.ltr.css" rel="stylesheet" integrity="sha512-JwMCpiHdk95MoUTatfaZJwstzeDnWfvWMJiwnSxZfPmgeCe4yvQDQ+ONMQjIy/Ht72r0TmlE+gvZnYRnpdLdVg==" crossorigin="anonymous"><link href="_assets/531b05a586ae2b2a.ltr.css" rel="stylesheet" integrity="sha512-lSfdrFLcoWENqEHvAHpZt0FO6avkB60gUo6LXSRVXHAJ17wUIsBzPA/UPzQg9tQYdLU6CPjw9p+SirW4UCJzNQ==" crossorigin="anonymous"><link href="_assets/static_font_4.ltr.css" rel="stylesheet"><link href="_assets/df12d6e0d208560f.runtime.js" rel="preload" as="script" crossorigin="anonymous" integrity="sha512-jbqSzO4rqjl7QwEM1BtuTAxKLY1zrlUv0cgOMNE2lvAVJzSMxAWUL7RbJokuKePiebZ9hCMJ3QZ4i3Q90KYiWQ==" nonce="7783f9b5-829d-418c-b252-47de657fd05e"><link href="_assets/aaa08f5161a956c7.i3d79q.vendor.js" rel="preload" as="script" crossorigin="anonymous" integrity="sha512-2uvObKRh56EnLmVUHGrNNaY2BdIjjB82PSV90VwXpnQ/nvwps09y+cIqwGPg7SfSfO8Q3kbd2HAuIPJCvfjlxw==" nonce="7783f9b5-829d-418c-b252-47de657fd05e"><link href="_assets/ebccce581bffd176.vendor.js" rel="preload" as="script" crossorigin="anonymous" integrity="sha512-eyEUEEnYEs/0KRKpSAq9YDrODPIRPbf7i7IYOr0wkqTmUjGnK0i1mgFdFo0j8xC6aSIlFxPmwltwg5uymzP5Cw==" nonce="7783f9b5-829d-418c-b252-47de657fd05e"><link href="_assets/fe8ab062943fed07.strings.js" rel="preload" as="script" crossorigin="anonymous" integrity="sha512-8th+xWn3JCjflE8P+AUn/AqXqxkRmgdVaXy8NiuVkt8fcdht6JkecM0R1PN4b5xGqGw+f2I5UazhoB6saBYstQ==" nonce="7783f9b5-829d-418c-b252-47de657fd05e"><link href="_assets/fa5fbb386a6578ac.es-MX.js" rel="preload" as="script" crossorigin="anonymous" integrity="sha512-DruP4D50RLhtHfO0PE25bSGzlnPDs2W7MMgijU8Y0l21iolCjSI2KukiDhniJ7d6vTkTwOJS+HlNrlFDUNiP3Q==" nonce="7783f9b5-829d-418c-b252-47de657fd05e"><link href="_assets/579d9fce6bb8113c.js" rel="preload" as="script" crossorigin="anonymous" integrity="sha512-zYEgT4sh/+LLaHmnCCUZoI72N2bZ9EeMDCMUCWnNl0/MwyH0urmUstuzXa+DW83c4gL7VMgItMTu+AeFyri2tg==" nonce="7783f9b5-829d-418c-b252-47de657fd05e"><meta name="referrer" content="strict-origin-when-cross-origin"><meta property="og:title" content="Sistema de puntos"><meta property="og:type" content="website"><link rel="shortcut icon" href="_assets/images/2d0b56e7e51cf11036ad8734bdb67e2d.png"><link rel="icon" href="_assets/images/e53c4bd8da5e491d9ab09e7cf0daf874.png" sizes="192x192"><link rel="apple-touch-icon" href="_assets/images/725b756a69a7d4c235070e51acd85560.png" sizes="180x180"><script nonce="7783f9b5-829d-418c-b252-47de657fd05e">
+      document.addEventListener('contextmenu', (e) => {
+        const isMedia = ['img', 'image', 'video', 'svg', 'picture'].some(
+          tagName => tagName.localeCompare(e.target.tagName, undefined, { sensitivity: 'base' }) === 0,
+        );
+        isMedia && e.preventDefault();
+      });
+    </script><script nonce="7783f9b5-829d-418c-b252-47de657fd05e">
+  const lang = navigator.language ? navigator.language : 'en';
+  window.canva_installFooter = (container) => {
+    if (!(container instanceof HTMLDivElement)) {
+      return;
+    }
+    fetch('_footer?lang=' + encodeURIComponent(lang)).then(response => {
+      if (response.status !== 200) {
         return;
       }
+      response.text().then(footerStr => {
+        const div = document.createElement('div');
+        div.innerHTML = footerStr;
+        for (const child of [...div.children]) {
+          if (child.tagName.toLowerCase() !== 'script') {
+            container.append(child);
+          }
+        }
 
-      const jugadores = JSON.parse(localStorage.getItem("jugadores")) || [];
-      const jugador = jugadores.find(j => j.nombre.toLowerCase() === nombreBusqueda);
-
-      if(!jugador){
-        errorMsg.textContent = "Jugador no encontrado. Verifica el nombre.";
-        perfil.style.display = "none";
-        return;
-      }
-
-      errorMsg.textContent = "";
-      nombreJugador.textContent = jugador.nombre;
-      categoriaJugador.textContent = jugador.categoria;
-      puntosJugador.textContent = jugador.puntos;
-      valorJugador.textContent = jugador.puntos * 200;
-
-      if(jugador.historial && jugador.historial.length > 0){
-        historialJugador.innerHTML = jugador.historial
-          .map(h => `<div>${h.fecha}: ${h.comentario} (${h.puntos > 0 ? '+' : ''}${h.puntos} pts)</div>`)
-          .join("");
-      } else {
-        historialJugador.textContent = "No hay historial de puntos.";
-      }
-
-      perfil.style.display = "block";
+        (() => { !function(e){"use strict";const t=document.getElementById("modal_backdrop"),n=document.getElementById("modal"),o=document.getElementById("captcha-form"),c=document.getElementById("report_button"),d=document.getElementById("form_report"),s=document.getElementById("form_cancel"),l=document.getElementById("form_submit_reason"),a=document.getElementById("form_go_back"),r=document.getElementById("form_submit_captcha"),m=document.getElementById("form_close"),i=document.getElementById("form_close_initial"),u=document.getElementById("report_reason_0"),p=document.getElementById("error_message"),_=document.getElementById("error_message_captcha"),y=new Map;y.set(0,document.getElementById("form_step_terms")),y.set(1,document.getElementById("form_step_report_reason")),y.set(4,document.getElementById("form_step_report_other"));const E=document.getElementById("form_step_report_ip");E&&y.set(5,E),y.set(2,document.getElementById("form_step_captcha")),y.set(3,document.getElementById("form_step_success"));const f=document.getElementById("report_reason_4"),g=document.getElementById("form_close_ip"),h=document.getElementById("form_go_back_ip"),I=document.getElementById("report_reason_other"),k=document.getElementById("form_close_other"),w=document.getElementById("form_go_back_other");function v(){t.classList.remove("active"),n.classList.remove("active"),c.classList.remove("active"),c.focus()}function B(e){y.forEach(((t,n)=>{n===e?(t.style.display="block",L(t)):t.style.display="none"}))}let b,C=!1;const T="NETEASE"===window.C_CAPTCHA_IMPLEMENTATION?()=>b:()=>{const e=o.elements.namedItem("g-recaptcha-response");return null==e?void 0:e.value};t.onclick=v,s.onclick=v,m.onclick=v,i.onclick=v,g&&(g.onclick=v),k.onclick=v,c.onclick=function(){y.forEach(((e,t)=>{e.style.display=0===t?"block":"none"})),t.classList.add("active"),n.classList.add("active"),c.classList.add("active"),u.checked=!0,setTimeout((()=>{L(y.get(0))}),350)},d.onclick=d.dataset.reportUrl?function(){const{origin:e,pathname:t}=window.location,n=e+t,o=d.dataset.reportUrl+encodeURIComponent(n);window.open(o)}:()=>B(1),l.onclick=()=>{null!=E&&f.checked?B(5):I.checked?B(4):(B(2),function(){if(C)return;const e=document.createElement("script");e.src="NETEASE"===window.C_CAPTCHA_IMPLEMENTATION?"https://cstaticdun.126.net/load.min.js":"https://www.google.com/recaptcha/api.js",e.async=!0,e.defer=!0,document.head.appendChild(e),C=!0,e.onload="NETEASE"===window.C_CAPTCHA_IMPLEMENTATION?()=>{var e;null===(e=window.initNECaptcha)||void 0===e||e.call(window,{captchaId:window.C_CAPTCHA_KEY,element:"#netease-captcha",protocol:"https",width:"auto",onVerify:(e,t)=>{b=t.validate}})}:()=>{}}())},a.onclick=()=>B(1),h&&(h.onclick=()=>B(1)),w.onclick=()=>B(1),o.addEventListener("submit",(function(e){e.preventDefault(),p.style.display="none",_.style.display="none";const t=function(){let e="";const t=document.getElementsByName("report_reason");for(let n=0;n<t.length;n++){const o=t[n];o.checked&&(e=o.value)}return e}(),n=T();if(!n)return void(_.style.display="block");const o={reason:t,challenge:n},c=window.location.origin+window.location.pathname+"/_api/report";r.classList.add("loading"),fetch(c,{method:"POST",body:JSON.stringify(o),headers:{"Content-Type":"application/json; charset=utf-8"}}).then((e=>{r.classList.remove("loading"),e.ok?B(3):p.style.display="block"}))}));const A=new Map,L=e=>{const t=A.get(e);null!=t&&document.removeEventListener("keydown",t);const n=e.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'),o=e,c=n[n.length-1],d=function(e){("Tab"===e.key||9===e.keyCode)&&(e.shiftKey?document.activeElement===o&&(c.focus(),e.preventDefault()):document.activeElement===c&&(o.focus(),e.preventDefault()))};A.set(e,d),document.addEventListener("keydown",d),o.focus()};e.keepFocus=L,Object.defineProperty(e,"__esModule",{value:!0})}({}); })();
+      });
     });
-
-    // Permitir buscar con Enter
-    inputNombre.addEventListener("keypress", e => {
-      if(e.key === "Enter") btnBuscar.click();
+  }
+</script><script nonce="7783f9b5-829d-418c-b252-47de657fd05e">
+    window.C_CAPTCHA_IMPLEMENTATION = 'RECAPTCHA';
+</script><script nonce="7783f9b5-829d-418c-b252-47de657fd05e">
+    window.C_CAPTCHA_KEY = '6Ldk59waAAAAAMPqkICbJjfMivZLCGtTpa6Wn6zO';
+</script></head><body><script nonce="7783f9b5-829d-418c-b252-47de657fd05e">document.documentElement.classList.replace('adaptive', window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');</script><div id="root"></div><script nonce="7783f9b5-829d-418c-b252-47de657fd05e">(function() {window['__canva_public_path__'] = '_assets\/'; window['bootstrap'] = JSON.parse('{"base":{"A?":"B","L":false,"N":false,"E":"9d7ca1029232f0d80caef24b0268ef358a8daf59","K":1747630111,"F":{"A?":"B"},"G":"CLIENT_FULL","I":"A","O":{"A?":"B"},"M":"/_online","U":[],"V":[],"a":{"K":"export_website","H":{}},"d":{"A":"wss://www.canva.com/_stream","B":{"F":"export_website"}},"b":{"A?":"H","C":{"a":"WEB"},"D":{"a":"WEB","c":"es-MX"},"E":{},"P":[],"Q":[],"R":false,"S":false}},"page":{"A":{"B":{"A?":"A","A":"TAGgL_VvTyc","B":1},"C":{"A":1366.0,"B":768.0,"C":"D"},"Q":[],"R":[],"P":"es-MX","D":"Sistema de puntos","E":"","F":[],"G":{},"Y":{},"V":[],"W":[],"A":[{"A?":"i","a":"PBcVv6x3mHjdQ6QW","R":false,"S":true,"U":false,"M":5000000.0,"Q":{},"W":[],"X":[],"H":[],"L":{},"D":{"C":"#ffffff","D":0.0,"F":false,"J":false,"G":false,"H":false},"r":[],"E":[{"A?":"O","A":0.0,"B":0.0,"D":1366.0,"C":768.0,"E":0.0,"F":0.0,"BA":[],"BB":[],"Q":false,"S":false,"P":[],"5":{},"T":{},"W":{},"a":"_website-element-widget?version=v1&pageIndex=0&elementIndex=0&elementType=C&locale=es-MX","b":1366.0,"c":768.0}],"I":[]}],"I":[]},"Z":{"A?":"E","M":"es-MX","e":false,"f":{"B":"#ffffff","C":"#304254"},"g":[{"A?":"A","K":"PBcVv6x3mHjdQ6QW","e":{"A":true}}]},"B":[{"A":"YACgEZ1cb1Q","B":0,"C":"Arimo","D":[{"style":"BOLD","files":[{"url":"_assets/fonts/9fd726aeae98b22824f0dc8947036e77.woff","format":"WOFF","unicodeRanges":[],"sizeBytes":234696},{"url":"_assets/fonts/98c4d2c0223fc8474641c77f923528e9.woff2","format":"WOFF2","unicodeRanges":[],"sizeBytes":194064},{"url":"_assets/fonts/0bb563f2f60ffd4e62b64cb021c33776.otf","format":"OTF","unicodeRanges":[],"sizeBytes":438516}],"subsettedFiles":[],"scriptSubsetFiles":[],"metadata":{"head":{"unitsPerEm":2048,"yMin":-771,"yMax":2116},"hhea":{"ascender":1854,"descender":-434,"lineGap":67},"os2":{"sTypoAscender":1491,"sTypoDescender":-431,"sTypoLineGap":307,"usWinAscent":1854,"usWinDescent":434,"fsSelection":32}}},{"style":"ITALICS","files":[{"url":"_assets/fonts/79d14bb61301a10c73c6cb293c29b309.otf","format":"OTF","unicodeRanges":[],"sizeBytes":440740},{"url":"_assets/fonts/ac9b8a560f98d1757a4565a2419d33c3.woff","format":"WOFF","unicodeRanges":[],"sizeBytes":240632},{"url":"_assets/fonts/d257a7100844bc3f98c9021168b6249e.woff2","format":"WOFF2","unicodeRanges":[],"sizeBytes":201132}],"subsettedFiles":[],"scriptSubsetFiles":[],"metadata":{"head":{"unitsPerEm":2048,"yMin":-621,"yMax":2077},"hhea":{"ascender":1854,"descender":-434,"lineGap":67},"os2":{"sTypoAscender":1491,"sTypoDescender":-425,"sTypoLineGap":307,"usWinAscent":1854,"usWinDescent":434,"fsSelection":1}}},{"style":"REGULAR","files":[{"url":"_assets/fonts/f8f199f09526f79e87644ed227e0f651.woff2","format":"WOFF2","unicodeRanges":[],"sizeBytes":194188},{"url":"_assets/fonts/daee28464eba92254cb149feea6599e3.otf","format":"OTF","unicodeRanges":[],"sizeBytes":436180},{"url":"_assets/fonts/4ff8a742aa834e35f10ead140b735c45.woff","format":"WOFF","unicodeRanges":[],"sizeBytes":234380}],"subsettedFiles":[],"scriptSubsetFiles":[],"metadata":{"head":{"unitsPerEm":2048,"yMin":-621,"yMax":2007},"hhea":{"ascender":1854,"descender":-434,"lineGap":67},"os2":{"sTypoAscender":1491,"sTypoDescender":-431,"sTypoLineGap":307,"usWinAscent":1854,"usWinDescent":434,"fsSelection":64}}},{"style":"BOLD_ITALICS","files":[{"url":"_assets/fonts/1060345c54d396e76d73f1da7ee200bd.woff2","format":"WOFF2","unicodeRanges":[],"sizeBytes":203232},{"url":"_assets/fonts/4de29305db46625343735e840e3d27aa.otf","format":"OTF","unicodeRanges":[],"sizeBytes":435028},{"url":"_assets/fonts/7fc2786f9023d4d812357cb787e9ad4b.woff","format":"WOFF","unicodeRanges":[],"sizeBytes":237660}],"subsettedFiles":[],"scriptSubsetFiles":[],"metadata":{"head":{"unitsPerEm":2048,"yMin":-771,"yMax":2109},"hhea":{"ascender":1854,"descender":-434,"lineGap":67},"os2":{"sTypoAscender":1491,"sTypoDescender":-431,"sTypoLineGap":307,"usWinAscent":1854,"usWinDescent":434,"fsSelection":33}}}],"E":false}],"E":[],"F":[],"G":[],"H":[{"A":"https://www.canva-hosted-embed.com/codelet/bbk6apkfz588f07w","Q":false,"B":"Canva","D":1747630111373,"E":"\x3ciframe src=\\"https://bbk6apkfz588f07w.canva-hosted-embed.com/codelet/AAEAEGJiazZhcGtmejU4OGYwN3cAAAAAAZbsBZaNzl_5iuOCu4RBIQ4mU-9qjq3ZE4oeCXXdx3ihsdvJIBw/\\" sandbox=\\"allow-same-origin allow-scripts allow-popups allow-forms\\" allowfullscreen=\\"true\\" width=\\"800\\" height=\\"450\\" style=\\"position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 8px;\\" allow=\\"fullscreen\\">\x3c/iframe>","F":1366,"G":768},{"A":"_website-element-widget?version=v1&pageIndex=0&elementIndex=0&elementType=C&locale=es-MX","Q":false,"B":"Canva","D":1747630111452,"E":"\x3ciframe src=\\"_website-element-widget?version=v1&pageIndex=0&elementIndex=0&elementType=C&locale=es-MX\\" width=\\"1366\\" height=\\"768\\" frameborder=\\"0\\" sandbox=\\"allow-same-origin allow-scripts allow-popups allow-forms allow-popups-to-escape-sandbox\\" referrerpolicy=\\"strict-origin-when-cross-origin\\">\x3c/iframe>","F":1366,"G":768}],"S":[],"K":{"B":"#ffffff","C":"#304254"},"Q":{"A":false,"B":true,"M":true},"R":false,"T":true,"U":false},"ui":{"N":false,"A":true,"B":"A","C":false,"D":false,"K":"A","I":false,"J":false}}'); window['flags'] = JSON.parse('{"978ce15d":150000.0,"fb00120d":true}'); window['cmsg'] = window['cmsg'] || { locale: "es-MX", strings: {} };})();</script><script crossorigin="anonymous" src="_assets/df12d6e0d208560f.runtime.js" defer integrity="sha512-jbqSzO4rqjl7QwEM1BtuTAxKLY1zrlUv0cgOMNE2lvAVJzSMxAWUL7RbJokuKePiebZ9hCMJ3QZ4i3Q90KYiWQ==" nonce="7783f9b5-829d-418c-b252-47de657fd05e"></script><script crossorigin="anonymous" src="_assets/aaa08f5161a956c7.i3d79q.vendor.js" defer integrity="sha512-2uvObKRh56EnLmVUHGrNNaY2BdIjjB82PSV90VwXpnQ/nvwps09y+cIqwGPg7SfSfO8Q3kbd2HAuIPJCvfjlxw==" nonce="7783f9b5-829d-418c-b252-47de657fd05e"></script><script crossorigin="anonymous" src="_assets/ebccce581bffd176.vendor.js" defer integrity="sha512-eyEUEEnYEs/0KRKpSAq9YDrODPIRPbf7i7IYOr0wkqTmUjGnK0i1mgFdFo0j8xC6aSIlFxPmwltwg5uymzP5Cw==" nonce="7783f9b5-829d-418c-b252-47de657fd05e"></script><script crossorigin="anonymous" src="_assets/fe8ab062943fed07.strings.js" integrity="sha512-8th+xWn3JCjflE8P+AUn/AqXqxkRmgdVaXy8NiuVkt8fcdht6JkecM0R1PN4b5xGqGw+f2I5UazhoB6saBYstQ==" nonce="7783f9b5-829d-418c-b252-47de657fd05e"></script><script crossorigin="anonymous" src="_assets/fa5fbb386a6578ac.es-MX.js" integrity="sha512-DruP4D50RLhtHfO0PE25bSGzlnPDs2W7MMgijU8Y0l21iolCjSI2KukiDhniJ7d6vTkTwOJS+HlNrlFDUNiP3Q==" nonce="7783f9b5-829d-418c-b252-47de657fd05e"></script><script crossorigin="anonymous" src="_assets/579d9fce6bb8113c.js" defer integrity="sha512-zYEgT4sh/+LLaHmnCCUZoI72N2bZ9EeMDCMUCWnNl0/MwyH0urmUstuzXa+DW83c4gL7VMgItMTu+AeFyri2tg==" nonce="7783f9b5-829d-418c-b252-47de657fd05e"></script></body></html>
     });
   </script>
 
